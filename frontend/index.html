@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML News Hub</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ML News Hub</h1>
+        <button id="fetch-news-btn">Fetch Latest ML News</button>
+        <div id="news-container">
+            {% for article in news_articles %}
+                <div class="news-article">
+                    <h2>{{ article.title }}</h2>
+                    <p><strong>Source:</strong> {{ article.source_name }}</p>
+                    <p>{{ article.description }}</p>
+                    <a href="{{ article.url }}" target="_blank">Read Full Article</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

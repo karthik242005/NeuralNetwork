@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetched News</title>
+</head>
+<body>
+    <h1>Latest News</h1>
+    <div id="news-container"></div>
+
+    <script>
+        window.onload = function() {
+            const fetchedNews = localStorage.getItem('fetchedNewsData');
+            if (fetchedNews) {
+                const newsData = JSON.parse(fetchedNews);
+                let newsHtml = '';
+                newsData.forEach(article => {
+                    newsHtml += `
+                        <div class="news-article">
+                            <h2>${article.title}</h2>
+                            <p><strong>Source:</strong> ${article.source_name}</p>
+                            <p>${article.summary || article.text.substring(0, 300) + '...'}</p>
+                            <a href="${article.url}" target="_blank">Read more</a>
+                        </div>
+                    `;
+                });
+                document.getElementById('news-container').innerHTML = newsHtml;
+            } else {
+                alert('No news data available');
+            }
+        }
+    </script>
+</body>
+</html>
