@@ -1,4 +1,3 @@
-new 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +16,7 @@ new
         </div>
 
         <div id="news-section" class="content show">
-            <div id="news-container"><div class="loading">Loading news</div></div>
+            <div id="news-container"></div>
             <div class="load-more" onclick="loadMore('news')">Load More</div>
         </div>
 
@@ -29,7 +28,7 @@ new
                 <button data-source="community">Community & ML</button>
                 <button data-source="startups">AI Startups & Tech</button>
             </div>
-            <div id="blogs-container"><div class="loading">Loading blogs</div></div>
+            <div id="blogs-container"></div>
             <div class="load-more" onclick="loadMore('blogs')">Load More</div>
         </div>
     </div>
@@ -39,8 +38,6 @@ new
         const cx = "838f38a979b8944cc"; // Replace with your Custom Search Engine ID
         let newsPage = 1, blogsPage = 1;
         let currentBlogFilter = 'all';
-        let isFetchingNews = false;
-        let isFetchingBlogs = false;
         
         // Blog sources organized by category
         const blogSources = {
@@ -75,20 +72,12 @@ new
 
         // Function to format date (assuming API returns publication date)
         function formatDate(dateString) {
-            try {
-                const date = new Date(dateString || Date.now());
-                return date.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-            } catch (e) {
-                return new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-            }
+            const date = new Date(dateString || Date.now());
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
         }
 
         // Extract domain from URL
@@ -99,13 +88,6 @@ new
             } catch (e) {
                 return url;
             }
-        }
-
-        // Check if a URL is valid and accessible
-        function isValidImageUrl(url) {
-            if (!url) return false;
-            // Basic URL validation to catch obvious issues
-            return url.match(/^https?:\/\/.+\..+/i) !== null;
         }
 
         // Determine blog category based on domain
@@ -119,34 +101,21 @@ new
         }
 
         async function fetchArticles(query, containerId, page, sortByDate = true) {
-            // Set fetching flag to prevent multiple requests
-            if (containerId === "news-container" && isFetchingNews) return;
-            if (containerId === "blogs-container" && isFetchingBlogs) return;
-            
-            if (containerId === "news-container") isFetchingNews = true;
-            if (containerId === "blogs-container") isFetchingBlogs = true;
-            
             try {
                 const start = (page - 1) * 10 + 1;
                 // Add date sorting parameter to prioritize recent content
                 const sort = sortByDate ? "&sort=date:d" : "";
                 const url = `https://www.googleapis.com/customsearch/v1?q=${query}${sort}&cx=${cx}&key=${apiKey}&start=${start}`;
                 
-                const container = document.getElementById(containerId);
-                
-                // Clear loading message if it's the first page
-                if (page === 1) {
-                    container.innerHTML = "";
-                }
-                
                 const response = await fetch(url);
                 const data = await response.json();
+                const container = document.getElementById(containerId);
 
                 if (!data.items || data.items.length === 0) {
                     if (page === 1) {
                         container.innerHTML = "<div class='no-results'>No articles found.</div>";
                     }
-                    document.querySelector(`.content:has(#${containerId}) .load-more`).style.display = "none";
+                    document.querySelector(`#${containerId}-section .load-more`).style.display = "none";
                     return;
                 }
 
@@ -154,20 +123,13 @@ new
                 displayArticles(data.items, containerId);
             } catch (error) {
                 console.error("Error fetching articles:", error);
-                const container = document.getElementById(containerId);
-                if (page === 1) {
-                    container.innerHTML = "<div class='no-results'>Failed to load articles. Please try again later.</div>";
-                }
-            } finally {
-                if (containerId === "news-container") isFetchingNews = false;
-                if (containerId === "blogs-container") isFetchingBlogs = false;
+                document.getElementById(containerId).innerHTML = "<div class='no-results'>Failed to load articles. Please try again later.</div>";
             }
         }
 
         function displayArticles(articles, containerId) {
             const container = document.getElementById(containerId);
             const isBlogs = containerId === "blogs-container";
-            let articlesAdded = 0;
             
             articles.forEach(article => {
                 const domain = extractDomain(article.link);
@@ -178,24 +140,10 @@ new
                     return;
                 }
 
-                // Find the best available image
-                let imageUrl = null;
-                if (article.pagemap?.cse_image && article.pagemap.cse_image.length > 0) {
-                    imageUrl = article.pagemap.cse_image[0].src;
-                } else if (article.pagemap?.cse_thumbnail && article.pagemap.cse_thumbnail.length > 0) {
-                    imageUrl = article.pagemap.cse_thumbnail[0].src;
-                }
-                
-                // Clean the image URL if it exists
-                if (imageUrl) {
-                    // Handle relative URLs
-                    if (imageUrl.startsWith('/')) {
-                        imageUrl = new URL(imageUrl, article.link).href;
-                    }
-                    
-                    // Clean up URL format issues
-                    imageUrl = imageUrl.replace(/^\/\//, 'https://');
-                }
+                // Get image or placeholder
+                const imageUrl = article.pagemap?.cse_image?.[0]?.src || 
+                                article.pagemap?.cse_thumbnail?.[0]?.src || 
+                                'https://via.placeholder.com/120x120?text=AI/ML';
                 
                 // Get publication date or use current date
                 const pubDate = article.pagemap?.metatags?.[0]?.['article:published_time'] || 
@@ -208,14 +156,9 @@ new
                     itemDiv.setAttribute("data-category", category);
                 }
                 
-                // Create proper structure for the item
-                const imageContent = isValidImageUrl(imageUrl) ? 
-                    `<img src="${imageUrl}" alt="${article.title}" onerror="this.parentNode.innerHTML='<div class=\'placeholder-text\'>AI/ML</div>'">` : 
-                    `<div class="placeholder-text">AI/ML</div>`;
-                
                 itemDiv.innerHTML = `
-                    <div class="item-image">${imageContent}</div>
-                    <div class="item-content">
+                    <img src="${imageUrl}" alt="${article.title}" onerror="this.src='https://via.placeholder.com/120x120?text=AI/ML'">
+                    <div>
                         <div class="date-info">${formatDate(pubDate)}</div>
                         <a href="${article.link}" target="_blank"><h3>${article.title}</h3></a>
                         <p>${article.snippet}</p>
@@ -223,16 +166,7 @@ new
                     </div>
                 `;
                 container.appendChild(itemDiv);
-                articlesAdded++;
             });
-            
-            // Hide load more button if no more articles match the filter
-            if (articlesAdded === 0 && container.childElementCount > 0) {
-                const loadMoreBtn = document.querySelector(`.content:has(#${containerId}) .load-more`);
-                if (loadMoreBtn) {
-                    loadMoreBtn.style.display = "none";
-                }
-            }
         }
 
         function loadMore(type) {
@@ -268,31 +202,26 @@ new
                 document.querySelector(".tabs .tab:nth-child(1)").classList.add("active");
                 document.getElementById("news-section").classList.add("show");
                 
-                // Only initialize news if it hasn't been loaded yet
-                if (!document.getElementById("news-container").innerHTML || 
-                    document.getElementById("news-container").innerHTML.includes("Loading")) {
+                // Initialize news if empty
+                if (document.getElementById("news-container").innerHTML === "") {
                     fetchArticles("Artificial Intelligence OR Machine Learning news", "news-container", 1, true);
                 }
             } else {
                 document.querySelector(".tabs .tab:nth-child(2)").classList.add("active");
                 document.getElementById("blogs-section").classList.add("show");
                 
-                // Only initialize blogs if it hasn't been loaded yet
-                if (!document.getElementById("blogs-container").innerHTML || 
-                    document.getElementById("blogs-container").innerHTML.includes("Loading")) {
+                // Initialize blogs if empty
+                if (document.getElementById("blogs-container").innerHTML === "") {
                     fetchArticles(getBlogQuery(), "blogs-container", 1, true);
                 }
             }
         }
 
-        // Set up filter buttons
+        // Filter blog sources
         document.addEventListener('DOMContentLoaded', function() {
             const filterButtons = document.querySelectorAll('.blog-filter button');
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Don't do anything if already selected
-                    if (this.classList.contains('active')) return;
-                    
                     const source = this.getAttribute('data-source');
                     currentBlogFilter = source;
                     
@@ -301,7 +230,7 @@ new
                     this.classList.add('active');
                     
                     // Reset and refetch blogs
-                    document.getElementById("blogs-container").innerHTML = "<div class='loading'>Loading blogs</div>";
+                    document.getElementById("blogs-container").innerHTML = "";
                     blogsPage = 1;
                     fetchArticles(getBlogQuery(), "blogs-container", 1, true);
                 });

@@ -1,71 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Hub - Your Machine Learning Community</title>
-    <link rel="stylesheet" href="./css/hcss.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Network - Your Machine Learning Community</title>
+  <link rel="stylesheet" href="./css/hcss.css">
+  <!-- Google Fonts for cyberpunk/neon aesthetic -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-content">
-            <h1>Neural Network</h1>
-            <div class="nav-links">
+  <nav class="navbar">
+    <div class="navbar-content">
+      <h1><i class="fas fa-brain"></i> Neural Network</h1>
+      <div class="nav-links">
+        <a href="#learn"><i class="fas fa-graduation-cap"></i> Learn</a>
+        <a href="./community.html"><i class="fas fa-users"></i> Community</a>
+        <a href="#resources"><i class="fas fa-book"></i> Resources</a>
+        <a href="./yttest.html"><i class="fas fa-video"></i> ML Tube</a>
+        <a href="./login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="./signup.html"><i class="fas fa-user-plus"></i> Signup</a>
+      </div>
+    </div>
+  </nav>
 
-                <a href="#learn">Learn</a>
-                <a href="./community.html">Community</a>
-                <a href="#resources">Resources</a>
-                <a href="#collaborate">Collaborate</a>
-                <a href="./login.html">Login</a>
-                <a href="./signup.html">Signup</a>
-            </div>
+  <main class="main-content">
+    <section class="hero">
+      <h1>Welcome to Neural Network</h1>
+      <p>Your gateway to machine learning excellence</p>
+      <a href="#join" class="button">Join Our Community</a>
+    </section>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3><i class="fas fa-book-open"></i> Learning Resources</h3>
+        <p>Access curated ML notes, videos, and tutorials from experts worldwide. Create your own channel to share knowledge.</p>
+      </div>
+      <div class="feature-card">
+        <h3><i class="fas fa-code-branch"></i> Collaborative Coding</h3>
+        <p>Code together in real-time, share repositories, and collaborate on ML projects with team members.</p>
+      </div>
+      <div class="feature-card">
+        <h3><i class="fas fa-flask"></i> Research Hub</h3>
+        <p>Explore the latest research papers, datasets, and implementations. Stay updated with cutting-edge ML developments.</p>
+      </div>
+      <div class="feature-card">
+        <h3><i class="fas fa-comments"></i> Discussion Board</h3>
+        <p>Join discussions, ask questions, and connect with ML enthusiasts and experts from around the globe.</p>
+      </div>
+    </div>
+
+    <section class="news-section">
+      <h2 class="section-title">Latest Updates</h2>
+      <div class="news-grid">
+        <div class="news-item">
+          <h4><i class="fas fa-code"></i> New Framework Release</h4>
+          <p>TensorFlow 2.14 brings improved performance and new features for edge devices, allowing for faster inference and better model optimization.</p>
         </div>
-    </nav>
-
-    <main class="main-content">
-        <section class="hero">
-            <h1>Welcome to Neural Network </h1>
-            <p style="font-size: 1.5rem; margin-bottom: 3rem; opacity: 0.9;">Your gateway to machine learning excellence</p>
-            <a href="#join" class="button">Join Our Community</a>
-        </section>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>Learning Resources</h3>
-                <p>Access curated ML notes, videos, and tutorials from experts worldwide. Create your own channel to share knowledge.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Collaborative Coding</h3>
-                <p>Code together in real-time, share repositories, and collaborate on ML projects with team members.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Research Hub</h3>
-                <p>Explore the latest research papers, datasets, and implementations. Stay updated with cutting-edge ML developments.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Discussion Board</h3>
-                <p>Join discussions, ask questions, and connect with ML enthusiasts and experts from around the globe.</p>
-            </div>
+        <div class="news-item">
+          <h4><i class="fas fa-lightbulb"></i> Research Highlight</h4>
+          <p>Breakthrough in reinforcement learning approaches enables models to learn complex tasks with significantly fewer training examples.</p>
         </div>
+        <div class="news-item">
+          <h4><i class="fas fa-project-diagram"></i> Community Spotlight</h4>
+          <p>Featured project: Real-time object detection implementation achieves state-of-the-art accuracy while maintaining 60 FPS on consumer hardware.</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
-        <section class="news-section">
-            <h2 class="section-title">Latest Updates</h2>
-            <div style="display: grid; gap: 1rem;">
-                <div>
-                    <h4>New Framework Release</h4>
-                    <p>TensorFlow 2.14 brings improved performance and new features...</p>
-                </div>
-                <div>
-                    <h4>Research Highlight</h4>
-                    <p>Breakthrough in reinforcement learning approaches...</p>
-                </div>
-                <div>
-                    <h4>Community Spotlight</h4>
-                    <p>Featured project: Real-time object detection implementation...</p>
-                </div>
-            </div>
-        </section>
-    </main>
+  <script>
+    // Simple animation for feature cards
+    document.addEventListener('DOMContentLoaded', () => {
+      const featureCards = document.querySelectorAll('.feature-card');
+      featureCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 200 * index);
+      });
+    });
+  </script>
 </body>
 </html>

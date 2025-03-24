@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Video Search</title>
+    
+    <style>
+        /* ML Tube Page CSS - Neon Cyan Theme */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+}
+
+:root {
+  --primary-neon: #0ff;
+  --primary-glow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff;
+  --secondary-neon: #f0f;
+  --tertiary-neon: #0f0;
+  --background-dark: #000;
+  --background-light: #111;
+  --text-light: #fff;
+  --text-dark: #333;
+  --gradient-bg: linear-gradient(45deg, #000, #111, #000);
+}
+
+body {
+  background: var(--gradient-bg);
+  color: var(--text-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--primary-neon);
+  box-shadow: 0 0 10px var(--primary-neon);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: var(--primary-neon);
+  text-shadow: var(--primary-glow);
+  animation: pulse 2s infinite;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1.1rem;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.nav-links a:hover {
+  color: var(--primary-neon);
+  text-shadow: 0 0 5px var(--primary-neon);
+}
+
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--primary-neon);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 5px var(--primary-neon);
+}
+
+.nav-links a:hover::before {
+  width: 100%;
+}
+
+/* Main Content */
+.main-content {
+  width: 90%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 2rem 0;
+}
+
+/* Hero Section */
+.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 3rem;
+  background: rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.1), transparent 70%);
+  z-index: -1;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+  text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon);
+  animation: glow 3s infinite alternate;
+}
+
+.hero p {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  font-size: 1.3rem;
+  color: var(--primary-neon);
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-input {
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--primary-neon);
+  border-radius: 30px;
+  padding: 0.8rem 1.5rem;
+  color: var(--text-light);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.search-input:focus {
+  box-shadow: 0 0 15px var(--primary-neon);
+}
+
+.button {
+  background: transparent;
+  color: var(--primary-neon);
+  padding: 0.8rem 2rem;
+  text-decoration: none;
+  font-size: 1.1rem;
+  border: 2px solid var(--primary-neon);
+  border-radius: 30px;
+  box-shadow: 0 0 10px var(--primary-neon);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button:hover {
+  background: var(--primary-neon);
+  color: var(--background-dark);
+  box-shadow: 0 0 20px var(--primary-neon);
+  transform: translateY(-3px);
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: 0.5s;
+  z-index: -1;
+}
+
+.button:hover::after {
+  left: 100%;
+}
+
+/* Video Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.feature-card:hover {
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  color: var(--primary-neon);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.feature-card iframe {
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Loading Animation */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-neon);
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px var(--primary-neon), 0 0 10px var(--primary-neon);
+  }
+  100% {
+    text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon), 0 0 30px var(--primary-neon);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 5px var(--primary-neon), 0 0 10px var(--primary-neon);
+  }
+  50% {
+    text-shadow: 0 0 15px var(--primary-neon), 0 0 25px var(--primary-neon);
+  }
+  100% {
+    text-shadow: 0 0 5px var(--primary-neon), 0 0 10px var(--primary-neon);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .search-container {
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <h1>ML Video Search</h1>
+            <div class="nav-links">
+                <a href="./home.html">Home</a>
+                <a href="./community.html"><i class="fas fa-users"></i>Community</a>
+                <a href="#"><i class="fas fa-graduation-cap"></i>Learn</a>
+                <a href="#"><i class="fas fa-book"></i>Resources</a>
+                <a href="#">Contact</a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="hero">
+            <h1>Explore ML Videos</h1>
+            <p>Find top machine learning tutorials, guides, and resources.</p>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="searchQuery" 
+                    placeholder="Search for ML videos" 
+                    class="search-input"
+                >
+                <button class="button">Search</button>
+            </div>
+        </div>
+
+        <div id="videoContainer" class="features-grid"></div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            fetchVideos('Machine Learning tutorials'); // Default search on page load
+        };
+
+        async function fetchVideos(query = 'Machine Learning tutorials') {
+            const apiKey = 'AIzaSyBAwYZKq6YUlOhjr9Pa1Wow-znanw4jkIo'; // Replace with your API Key
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&key=${apiKey}&type=video&maxResults=5`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                const videoContainer = document.getElementById('videoContainer');
+                videoContainer.innerHTML = '';
+
+                data.items.forEach(item => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const videoElement = `
+                        <div class="feature-card">
+                            <h3>${title}</h3>
+                            <iframe 
+                                width="100%" 
+                                height="215"
+                                src="https://www.youtube.com/embed/${videoId}" 
+                                frameborder="0" 
+                                allowfullscreen
+                            ></iframe>
+                        </div>`;
+                    videoContainer.innerHTML += videoElement;
+                });
+
+            } catch (error) {
+                console.error('Error fetching videos:', error);
+                alert('Failed to fetch videos.');
+            }
+        }
+
+        document.querySelector('.button').addEventListener('click', () => {
+            const query = document.getElementById('searchQuery').value || 'Machine Learning tutorials';
+            fetchVideos(query);
+        });
+    </script>
+</body>
+</html>

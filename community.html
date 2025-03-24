@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Hub - Discussion Board</title>
+    <title>Neural Network - Community Discussions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/ccss.css">
 
 </head>
@@ -22,7 +24,7 @@
 
     <main class="main-content">
         <div class="discussion-header">
-            <h2 style="font-size: 2.5rem; color: var(--text-light);">Community Section</h2>
+            <h2>Community Discussions</h2>
             <a href="#new-post" class="button">Start Discussion</a>
         </div>
 
@@ -32,6 +34,7 @@
             <button class="filter-button">Computer Vision</button>
             <button class="filter-button">NLP</button>
             <button class="filter-button">Reinforcement Learning</button>
+            <button class="filter-button">GANs</button>
         </div>
 
         <div class="discussions">
@@ -41,8 +44,9 @@
                     <span>Posted by @ML_Expert</span>
                     <span>2 hours ago</span>
                     <span class="tag">Deep Learning</span>
+                    <span class="tag">NLP</span>
                 </div>
-                <p>I've been experimenting with different approaches to training LLMs, and I wanted to share some insights about optimization techniques and hardware requirements...</p>
+                <p>I've been experimenting with different approaches to training LLMs, and I wanted to share some insights about optimization techniques and hardware requirements. Has anyone else found effective ways to reduce training time without compromising model quality?</p>
                 <div class="discussion-stats">
                     <span>👍 42 upvotes</span>
                     <span>💬 15 comments</span>
@@ -56,8 +60,9 @@
                     <span>Posted by @ComputerVision_Pro</span>
                     <span>5 hours ago</span>
                     <span class="tag">Computer Vision</span>
+                    <span class="tag">Edge Computing</span>
                 </div>
-                <p>Looking for recommendations on optimizing YOLO models for deployment on resource-constrained edge devices. Current latency is...</p>
+                <p>Looking for recommendations on optimizing YOLO models for deployment on resource-constrained edge devices. Current latency is too high for real-time applications. Any experience with model pruning or quantization techniques that preserve accuracy?</p>
                 <div class="discussion-stats">
                     <span>👍 28 upvotes</span>
                     <span>💬 23 comments</span>
@@ -71,15 +76,70 @@
                     <span>Posted by @NLP_Researcher</span>
                     <span>1 day ago</span>
                     <span class="tag">NLP</span>
+                    <span class="tag">Transformers</span>
                 </div>
-                <p>I'm working on implementing a custom attention mechanism for my research project. Would love to get feedback on the approach...</p>
+                <p>I'm working on implementing a custom attention mechanism for my research project. Would love to get feedback on the approach I'm taking. Has anyone experimented with sparse attention patterns or approximate attention calculations that scale better with sequence length?</p>
                 <div class="discussion-stats">
                     <span>👍 156 upvotes</span>
                     <span>💬 45 comments</span>
                     <span>👀 892 views</span>
                 </div>
             </div>
+            
+            <div class="discussion-card">
+                <h3 class="discussion-title">Generating Realistic Images with Diffusion Models</h3>
+                <div class="discussion-meta">
+                    <span>Posted by @GAN_Enthusiast</span>
+                    <span>2 days ago</span>
+                    <span class="tag">GANs</span>
+                    <span class="tag">Diffusion Models</span>
+                </div>
+                <p>I've been exploring the capabilities of diffusion models compared to traditional GANs. The quality is impressive, but I'm struggling with controlling specific attributes in the generated images. Any suggestions for implementing effective conditioning mechanisms?</p>
+                <div class="discussion-stats">
+                    <span>👍 92 upvotes</span>
+                    <span>💬 37 comments</span>
+                    <span>👀 467 views</span>
+                </div>
+            </div>
+            
+            <div class="discussion-card">
+                <h3 class="discussion-title">Ethics of Reinforcement Learning in Real-World Applications</h3>
+                <div class="discussion-meta">
+                    <span>Posted by @Ethics_AI</span>
+                    <span>3 days ago</span>
+                    <span class="tag">Reinforcement Learning</span>
+                    <span class="tag">Ethics</span>
+                </div>
+                <p>As RL algorithms get deployed in more critical systems, I'm concerned about the safety implications. How can we effectively constrain exploration in high-stakes environments? What frameworks exist for evaluating potential harms before deployment?</p>
+                <div class="discussion-stats">
+                    <span>👍 203 upvotes</span>
+                    <span>💬 78 comments</span>
+                    <span>👀 1245 views</span>
+                </div>
+            </div>
         </div>
     </main>
+
+    <script>
+        // Add delay to discussion cards for staggered animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.discussion-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                }, 100);
+            });
+            
+            // Filter button functionality
+            const filterButtons = document.querySelectorAll('.filter-button');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    // Filter logic would go here in a real application
+                });
+            });
+        });
+    </script>
 </body>
 </html>
